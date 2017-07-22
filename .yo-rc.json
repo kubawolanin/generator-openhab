@@ -1,0 +1,14 @@
+{
+  "generator-node": {
+    "promptValues": {
+      "authorName": "kubawolanin",
+      "authorEmail": "hi@kubawolanin.com",
+      "authorUrl": "www.kubawolanin.com"
+    }
+  },
+  "generator-openhab": {
+    "promptValues": {
+      "language": "pl"
+    }
+  }
+}
