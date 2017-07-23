@@ -8,13 +8,13 @@ Note: This is an ongoing development, far from MVP ;-)
 First, install [Yeoman](http://yeoman.io) and generator-openhab using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
 
 ```bash
-npm install -g yo
-npm install -g generator-openhab
+npm i -g yo generator-openhab
 ```
 
-Then generate your new project:
+Then go to your `openhab-config/` folder and generate your files:
 
 ```bash
+cd /etc/openhab2
 yo openhab
 ```
 

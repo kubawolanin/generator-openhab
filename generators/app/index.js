@@ -19,11 +19,12 @@ let floors = [
 ];
 
 let rooms = [
-  { value: 'Attic', icon: '' },
+  { value: 'Attic', icon: 'attic' },
   { value: 'Balcony', icon: '' },
   { value: 'Basement', icon: '' },
   { value: 'Bathroom', icon: 'bath' },
   { value: 'Bedroom', icon: 'bedroom' },
+  { value: 'Boiler', icon: 'boiler_viessmann' },
   { value: 'Wardrobe', icon: 'wardrobe' },
   { value: 'Corridor', icon: 'corridor' },
   { value: 'Dining', icon: '' },
@@ -54,7 +55,8 @@ let rooms = [
   { value: 'Stairwell', icon: '' },
   { value: 'StorageRoom', icon: 'suitcase' },
   { value: 'Studio', icon: '' },
-  { value: 'Toilet', icon: 'toilet' }
+  { value: 'Toilet', icon: 'toilet' },
+  { value: 'Terrace', icon: 'terrace' }
 ];
 
 let sensors = [
@@ -64,6 +66,9 @@ let sensors = [
   { value: 'Motion', icon: 'motion', type: 'Switch:OR(ON, OFF)' },
   { value: 'Power', icon: 'poweroutlet', type: 'Switch:OR(ON, OFF)', noPlural: true },
   { value: 'Shutter', icon: 'rollershutter', type: 'Switch:OR(ON, OFF)' },
+  { value: 'Fan', icon: 'fan_ceiling', type: 'Switch:OR(ON, OFF)' },
+  { value: 'AirCon', icon: 'climate', type: 'Switch:OR(ON, OFF)' },
+  { value: 'Heating', icon: 'heating', type: 'Number:AVG', noPlural: true },
   { value: 'Temperature', icon: 'temperature', type: 'Number:AVG', noPlural: true },
   { value: 'Humidity', icon: 'humidity', type: 'Number:AVG', noPlural: true },
 ];

@@ -1,12 +1,12 @@
 {
   "name": "generator-openhab",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Generates simple openHAB items and sitemaps for your home",
   "homepage": "https://github.com/kubawolanin/generator-openhab",
   "author": {
     "name": "Kuba Wolanin",
     "email": "hi@kubawolanin.com",
-    "url": "www.kubawolanin.com"
+    "url": "http://www.kubawolanin.com"
   },
   "files": [
     "generators"
@@ -22,17 +22,17 @@
   "devDependencies": {
     "eslint": "^4.1.0",
     "eslint-config-xo-space": "^0.16.0",
-    "i18n": "^0.8.3",
     "jest": "^19.0.2",
     "jest-cli": "^20.0.0",
     "nsp": "^2.6.3",
-    "underscore.string": "^3.3.4",
     "yeoman-assert": "^3.0.0",
     "yeoman-test": "^1.6.0"
   },
   "dependencies": {
-    "yeoman-generator": "^1.0.0",
     "chalk": "^1.1.3",
+    "i18n": "^0.8.3",
+    "underscore.string": "^3.3.4",
+    "yeoman-generator": "^1.0.0",
     "yosay": "^2.0.0"
   },
   "jest": {
