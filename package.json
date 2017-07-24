@@ -1,6 +1,6 @@
 {
   "name": "generator-openhab",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Generates simple openHAB items and sitemaps for your home",
   "homepage": "https://github.com/kubawolanin/generator-openhab",
   "author": {

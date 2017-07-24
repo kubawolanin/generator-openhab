@@ -5,23 +5,29 @@ const s = require('underscore.string');
 const i18n = require('i18n');
 const yosay = require('yosay');
 
+/**
+ * i18n definitions
+ */
 let languages = [
   { name: 'English', value: 'en' },
   { name: 'Polish', value: 'pl' }
 ];
 
+/**
+ * Structure definitions
+ */
 let floors = [
-  { value: 'GroundFloor', icon: 'groundfloor' },
-  { value: 'FirstFloor', icon: 'firstfloor' },
-  { value: 'SecondFloor', icon: 'attic' },
-  { value: 'ThirdFloor', icon: 'attic' },
-  { value: 'FourthFloor', icon: 'attic' }
+  { name: 'GF', value: 'GroundFloor', icon: 'groundfloor' },
+  { name: 'F1', value: 'FirstFloor', icon: 'firstfloor' },
+  { name: 'F2', value: 'SecondFloor', icon: 'attic' },
+  { name: 'F3', value: 'ThirdFloor', icon: 'attic' },
+  { name: 'F4', value: 'FourthFloor', icon: 'attic' }
 ];
 
 let rooms = [
   { value: 'Attic', icon: 'attic' },
   { value: 'Balcony', icon: '' },
-  { value: 'Basement', icon: '' },
+  { value: 'Basement', icon: 'cellar' },
   { value: 'Bathroom', icon: 'bath' },
   { value: 'Bedroom', icon: 'bedroom' },
   { value: 'Boiler', icon: 'boiler_viessmann' },
@@ -42,14 +48,14 @@ let rooms = [
   { value: 'Library', icon: 'office' },
   { value: 'Living', icon: 'sofa' },
   { value: 'LivingDining', icon: 'sofa' },
-  { value: 'Loft', icon: '' },
-  { value: 'Lounge', icon: '' },
+  { value: 'Loft', icon: 'attic' },
+  { value: 'Lounge', icon: 'sofa' },
   { value: 'MasterBathroom', icon: '' },
   { value: 'MasterBedroom', icon: 'bedroom_red' },
   { value: 'NannyRoom', icon: 'woman_1' },
   { value: 'Office', icon: 'office' },
   { value: 'Outdoor', icon: 'garden' },
-  { value: 'Porch', icon: '' },
+  { value: 'Porch', icon: 'group' },
   { value: 'SecondBathroom', icon: '' },
   { value: 'SecondBedroom', icon: 'bedroom_orange' },
   { value: 'Stairwell', icon: '' },
@@ -59,7 +65,7 @@ let rooms = [
   { value: 'Terrace', icon: 'terrace' }
 ];
 
-let sensors = [
+let devices = [
   { value: 'Light', icon: 'light', type: 'Switch:OR(ON, OFF)' },
   { value: 'Window', icon: 'window', type: 'Contact:OR(OPEN, CLOSED)' },
   { value: 'Door', icon: 'door', type: 'Contact:OR(OPEN, CLOSED)' },
@@ -73,6 +79,91 @@ let sensors = [
   { value: 'Humidity', icon: 'humidity', type: 'Number:AVG', noPlural: true },
 ];
 
+/**
+ * Initial prompting
+ */
+const initPrompts = [{
+  type: 'list',
+  name: 'language',
+  message: 'Please select your language',
+  choices: languages,
+  default: 'en',
+  store: true
+},
+
+{
+  type: 'checkbox',
+  name: 'filesGenerated',
+  message: 'What would you like to generate?',
+  choices: [
+    { name: 'Items file', value: 'items' },
+    { name: 'Sitemap', value: 'sitemap' },
+    { name: 'HABpanel Dashboards', value: 'habpanel' }
+  ],
+  default: ['items', 'sitemap']
+},
+
+{
+  type: 'input',
+  name: 'homeName',
+  message: 'How do you want to call your home?',
+  default: 'Our Home'
+},
+
+{
+  type: 'input',
+  name: 'floorsCount',
+  message: 'How many floors do you have? (max 5)',
+  default: 1,
+  validate: function (value) {
+    var valid = !isNaN(parseFloat(value)) && value <= 5 && value > 0;
+    return valid || 'Please enter a number lower than six.';
+  }
+},
+
+  // {
+  //   type: 'input',
+  //   name: 'typeOrSelectRooms',
+  //   message: 'Would you like to choose the rooms from the list or type them yourself?',
+  //   default: ''
+  // }
+];
+
+let roomsTemplate = {
+  type: 'checkbox',
+  choices: rooms,
+  default: [
+    'Bathrom',
+    'Bedroom',
+    'Dining',
+    'Kitchen',
+    'Living',
+    'Office'
+  ]
+};
+
+let devicesTemplate = {
+  type: 'checkbox',
+  name: 'roomSensors',
+  choices: (answers) => {
+    return devices.map(device => {
+      let pluralVal = device.noPlural ? device.value : device.value + 's';
+      return {
+        name: i18n.__(device.value),
+        pluralName: i18n.__(pluralVal),
+        value: device.value,
+        pluralValue: pluralVal,
+        icon: device.icon,
+        type: device.type
+      }
+    })
+  }
+};
+
+let structure = [];
+let floorsPrompts = [];
+let roomsPrompts = [];
+
 module.exports = class extends Generator {
   constructor(args, opts) {
     super(args, opts);
@@ -84,138 +175,89 @@ module.exports = class extends Generator {
     });
   }
 
+  /**
+   * Ask for initial things like the language
+   * and number of floors.
+   * Additionally prepare a dynamic list of rooms to be chosen
+   * for each floor.
+   */
   prompting() {
     this.log(yosay(
       'Welcome to the ' + chalk.yellow('open') + chalk.red('HAB') + ' generator! \n' +
       'Let\'s design your home automation system.'
     ));
 
-    const initPrompts = [
-      {
-        type: 'list',
-        name: 'language',
-        message: 'Please select your language',
-        choices: languages,
-        default: 'en',
-        store: true
-      },
+    return this.prompt(initPrompts).then((answers) => {
+      i18n.setLocale(answers.language);
+      this.props = answers;
 
-      {
-        type: 'checkbox',
-        name: 'filesGenerated',
-        message: 'What would you like to generate?',
-        choices: [
-          { name: 'Items file', value: 'items' },
-          { name: 'Sitemap', value: 'sitemap' },
-          { name: 'HABpanel Dashboards', value: 'habpanel' }
-        ],
-        default: ['items', 'sitemap']
-      },
-
-      // {
-      //   type: 'input',
-      //   name: 'typeOrSelectRooms',
-      //   message: 'Would you like to choose the rooms from the list or type them yourself?',
-      //   default: ''
-      // },
-
-      {
-        type: 'input',
-        name: 'homeName',
-        message: 'How do you want to call your home?',
-        default: 'Our Home'
-      },
-      {
-        type: 'input',
-        name: 'floorsCount',
-        message: 'How many floors do you have? (max 5)',
-        default: 1,
-        validate: function(value) {
-            var valid = !isNaN(parseFloat(value)) && value <= 5 && value > 0;
-            return valid || 'Please enter a number lower than six.';
+      rooms = rooms.map(room => {
+        return {
+          name: i18n.__(room.value),
+          value: room.value,
+          icon: room.icon
         }
-      },
-      {
-      type: 'checkbox',
-      name: 'chosenRooms',
-      message: 'Please select the rooms on 1 floor',
-      choices: rooms,
-      default: [
-        'Bathrom',
-        'Bedroom',
-        'Dining',
-        'Kitchen',
-        'Living',
-        'Office'
-      ]
-    }, {
-      type: 'checkbox',
-      name: 'roomSensors',
-      message: 'What kind of devices/sensors are in the Kitchen?',
-      choices: sensors
-    }
-    ];
+      });
 
-    let roomsPrompt = [{
-      type: 'checkbox',
-      name: 'chosenRooms',
-      message: 'Please select the rooms on 1 floor',
-      choices: rooms,
-      default: [
-        'Bathrom',
-        'Bedroom',
-        'Dining',
-        'Kitchen',
-        'Living',
-        'Office'
-      ]
-    }];
+      let floorsCount = +answers.floorsCount;
+      for (var i = 0; i < floorsCount; i++) {
+        floors[i].rooms = [];
+        structure.push(floors[i]);
+        let tpl = Object.assign({
+          name: floors[i].name + '_rooms',
+          message: 'Please select the rooms on ' + floors[i].name
+        }, roomsTemplate);
+        floorsPrompts.push(tpl);
+      }
+    });
+  }
 
-    let sensorsPrompt = [{
-      type: 'checkbox',
-      name: 'roomSensors',
-      message: 'What kind of devices/sensors are in the Kitchen?',
-      choices: sensors
-    }];
-
-    return this.prompt(initPrompts)
-      .then(props => {
-        this.props = props;
-
-        i18n.setLocale(this.props.language);
-
-        if (props.floorsCount > 1) {
-            // let roomsPrompt = ''
-        }
-
-        this.props.floors = floors.map(floor => {
-          return {
-            name: i18n.__(floor.value),
-            value: floor.value,
-            icon: floor.icon
-          }
+  /**
+   * Ask for rooms on each floor
+   * Additionally prepare a dynamic list of devices to be chosen
+   * for each room.
+   */
+  prompting2() {
+    return this.prompt(floorsPrompts).then((answers) => {
+      structure.forEach(function (floor, index) {
+        let roomList = answers[floor.name + '_rooms'].map((room) => {
+          return rooms.find(r => { return r.value === room; });
         });
 
-        this.props.rooms = rooms.map(room => {
-          return {
-            name: i18n.__(room.value),
-            value: room.value,
-            icon: room.icon
-          }
-        });
+        structure[index].rooms = roomList;
 
-        this.props.sensors = sensors.map(sensor => {
-          let pluralVal = sensor.noPlural ? sensor.value : sensor.value + 's';
-          return {
-            name: i18n.__(sensor.value),
-            pluralName: i18n.__(pluralVal),
-            value: sensor.value,
-            pluralValue: pluralVal,
-            icon: sensor.icon,
-            type: sensor.type
-          }
+        roomList.forEach(function(room, i) {
+          structure[index].rooms[i].devices = [];
+          let tpl = Object.assign({
+            name: floor.name + '_' + room.name + '_devices',
+            message: 'Select smart devices in: ' + room.name + ' on ' + floor.name
+          }, devicesTemplate);
+          roomsPrompts.push(tpl);
         });
       });
+    });
+  }
+
+  /**
+   * Ask for smart devices in each room
+   */
+  prompting3() {
+    return this.prompt(roomsPrompts).then((answers) => {
+      structure.forEach(function (floor, i) {
+        floor.rooms.forEach(function(room, j) {
+            let name = floor.name + '_' + room.name + '_devices';
+            let deviceList = answers[name] ? answers[name].map((device) => {
+                return device.find(d => { return d.value === device; });
+            }) : [];
+
+            structure[i].rooms[j].devices = deviceList;
+        });
+      });
+
+      this.props.structure = structure;
+
+      this.log(JSON.stringify(structure, null, '  '));
+    });
   }
 
   writing() {

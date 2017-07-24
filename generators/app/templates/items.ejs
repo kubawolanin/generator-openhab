@@ -1,17 +1,11 @@
 Group Home "<%= homeName %>"   <house>
 
-<% for(var i = 0; i < floorsCount; i++) { -%>
-<% let floor = floors[i]; -%>
-Group F<%= i -%> "<%= floor.name || floor.value %>" <%- floor.icon? '<' + floor.icon + '>' : '' -%> (Home)
-<% }; -%>
-
-<% chosenRooms.forEach(function(str){ -%>
-<% let room = rooms.find(r => { return r.value === str; }); -%>
-Group <%= room.value %> "<%= room.name || room.value %>" <%- room.icon? '<' + room.icon + '>' : '' -%> (Home)
+<% structure.forEach(function(floor) { -%>
+Group <%= floor.name %> "<%= floor.name || floor.value %>" <%- floor.icon? '<' + floor.icon + '>' : '' -%> (Home)
 <% }); -%>
 
-<% roomSensors.forEach(function(str){ -%>
-<% let sensor = sensors.find(s => { return s.value === str; }); -%>
-Group:<%= sensor.type %> <%= sensor.pluralValue -%> "<%= sensor.pluralName %>" <%- sensor.icon? '<' + sensor.icon + '>' : '' -%> (Home)
+<% structure.forEach(function(floor) { -%>
+<% floor.rooms.forEach(function(room) { -%>
+Group <%= room.value %> "<%= room.name || room.value %>" <%- room.icon? '<' + room.icon + '>' : '' -%> (Home, <%= floor.name %>)
 <% }); -%>
-
+<% }); -%>
