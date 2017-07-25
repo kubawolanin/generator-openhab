@@ -1,11 +1,23 @@
-sitemap home label="<%= homeName %>" {
+sitemap <%= name %> label="<%= homeName %>" {
+<% if (structure.length) { -%>
     Frame {
-        Group item=Rooms
+<% structure.forEach(function(floor, index, floors) { -%>
+<%   if (floors.length > 1) { -%>
+        Group item=<%= floor.name %>
+<%   } else { -%>
+<%     floor.rooms.forEach(function(room) { -%>
+        Group item=<%= room.value %>
+<%     }); -%>
+<%   } -%>
+<% }); -%>
     }
+<% } -%>
 
+<% if (devices.length) { -%>
     Frame {
-        Group item=Lights
-        Group item=Shutters
-        Group item=Windows
+<%   devices.forEach(function(device) { -%>
+        Group item=<%= device.pluralValue %>
+<%   }); -%>
     }
+<% } -%>
 }

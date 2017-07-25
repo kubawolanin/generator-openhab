@@ -1,11 +1,21 @@
 Group Home "<%= homeName %>"   <house>
-
-<% structure.forEach(function(floor) { -%>
-Group <%= floor.name %> "<%= floor.name || floor.value %>" <%- floor.icon? '<' + floor.icon + '>' : '' -%> (Home)
+<% if (structure.length) { -%>
+<% structure.forEach(function(floor, index, floors) { -%>
+<%   if (floors.length > 1) { -%>
+    Group <%= floor.name %> "<%= floor.name || floor.value %>" <%- floor.icon? '<' + floor.icon + '>' : '' -%> (Home)
+<%   } -%>
 <% }); -%>
 
-<% structure.forEach(function(floor) { -%>
-<% floor.rooms.forEach(function(room) { -%>
-Group <%= room.value %> "<%= room.name || room.value %>" <%- room.icon? '<' + room.icon + '>' : '' -%> (Home, <%= floor.name %>)
+<% structure.forEach(function(floor, index, floors) { -%>
+<%   floor.rooms.forEach(function(room) { -%>
+Group <%= floors.length > 1 ? floor.name + '_' : '' -%><%= room.value %> "<%= room.name || room.value %>" <%- room.icon? '<' + room.icon + '>' : '' -%> (Home<%= floors.length > 1 ? ', ' + floor.name : '' -%>)
+<%     room.devices.forEach(function(device) { -%>
+    <%= device.type.split(':')[0] %> <%= floors.length > 1 ? floor.name + '_' : '' -%><%= room.value %>_<%= device.value %> "<%= device.name || device.value %>" <%- device.icon? '<' + device.icon + '>' : '' -%> (<%= floors.length > 1 ? floor.name + '_' : '' -%><%= room.value %><%= device.pluralValue ? ', ' + device.pluralValue : '' %>)
+<%     }); -%>
+
+<%   }); -%>
 <% }); -%>
+<% } -%>
+<% devices.forEach(function(device) { -%>
+Group<%= ':' + device.type %> <%= device.pluralValue %> "<%= device.pluralName || device.pluralValue %>" <%- device.icon? '<' + device.icon + '>' : '' -%> (Home)
 <% }); -%>
