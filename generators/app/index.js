@@ -329,7 +329,7 @@ module.exports = class extends Generator { // eslint-disable-line id-match
     if (this.props.filesGenerated.includes('sitemap')) {
       this.fs.copyTpl(
         this.templatePath('sitemap.ejs'),
-        this.destinationPath('sitemap/' + name + '.sitemap'),
+        this.destinationPath('sitemaps/' + name + '.sitemap'),
         this.props
       );
     }
