@@ -2,6 +2,8 @@
 > This is a command-line tool that generates openHAB items, sitemap and a [HABPanel](https://github.com/openhab/org.openhab.ui.habpanel) dashboard for your home.
 [openHAB](http://openhab.org/) is a vendor and techology agnostic open source automation software for your home.
 
+![openHAB generator](yo-openhab.gif)
+
 With this generator you'll set up your smart home with a least amount of work.
 Simply provide some details on how your house is structured:
 
