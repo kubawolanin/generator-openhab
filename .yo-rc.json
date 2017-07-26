@@ -8,7 +8,86 @@
   },
   "generator-openhab": {
     "promptValues": {
-      "language": "en"
+      "language": "en",
+      "filesGenerated": [
+        "items",
+        "sitemap",
+        "habpanel"
+      ],
+      "homeName": "Our Home",
+      "floorsCount": 1,
+      "GF_rooms": [
+        "Bedroom",
+        "Dining",
+        "Kitchen",
+        "Living",
+        "Office"
+      ],
+      "GF_Bedroom_devices": [
+        "Light",
+        "Window",
+        "Door",
+        "Motion",
+        "Power",
+        "Shutter",
+        "Fan",
+        "AirCon",
+        "Heating",
+        "Temperature",
+        "Humidity"
+      ],
+      "GF_Dining_devices": [
+        "Light",
+        "Window",
+        "Door",
+        "Motion",
+        "Power",
+        "Shutter",
+        "Fan",
+        "AirCon",
+        "Heating",
+        "Temperature",
+        "Humidity"
+      ],
+      "GF_Kitchen_devices": [
+        "Light",
+        "Window",
+        "Door",
+        "Motion",
+        "Power",
+        "Shutter",
+        "Fan",
+        "AirCon",
+        "Heating",
+        "Temperature",
+        "Humidity"
+      ],
+      "GF_Living_devices": [
+        "Light",
+        "Window",
+        "Door",
+        "Motion",
+        "Power",
+        "Shutter",
+        "Fan",
+        "AirCon",
+        "Heating",
+        "Temperature",
+        "Humidity"
+      ],
+      "GF_Office_devices": [
+        "Light",
+        "Window",
+        "Door",
+        "Motion",
+        "Power",
+        "Shutter",
+        "Fan",
+        "AirCon",
+        "Heating",
+        "Temperature",
+        "Humidity"
+      ]
     }
   }
 }

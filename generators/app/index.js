@@ -163,19 +163,30 @@ let makeWidgets = function(device) {
 
       if (dev) {
         let widget = {
-          item: (floors.length > 1 ? floor.name + '_' : '') + room.value + '_' + dev.value,
-          name: room.name,
-          sizeX: 2,
-          sizeY: 2,
-          type: type,
-          row: row > 0 ? row * 2 : 0,
-          col: (count * 2) % 12,
+          item     : (floors.length > 1 ? floor.name + '_' : '') + room.value + '_' + dev.value,
+          name     : room.name,
+          sizeX    : 2,
+          sizeY    : 2,
+          type     : type,
+          row      : row > 0 ? row * 2 : 0,
+          col      : (count * 2) % 12,
           font_size: '24',
-          backdrop_iconset: 'eclipse-smarthome-classic',
-          backdrop_icon: device.icon,
-          backdrop_center: true,
           useserverformat: true
         };
+
+        if (type === 'switch') {
+            widget = _.extend({}, widget, {
+                iconset  : 'eclipse-smarthome-classic',
+                icon     : device.icon,
+                icon_size: 64
+            });
+        } else {
+            widget = _.extend({}, widget, {
+                backdrop_iconset: 'eclipse-smarthome-classic',
+                backdrop_icon   : device.icon,
+                backdrop_center : true
+            });
+        }
 
         widgets.push(widget);
       }
@@ -188,29 +199,29 @@ let makeWidgets = function(device) {
 let translate = function() {
   floors = floors.map(floor => {
     return {
-      name: floor.name,
+      name : floor.name,
       value: i18n.__(floor.value),
-      icon: floor.icon
+      icon : floor.icon
     };
   });
 
   rooms = rooms.map(room => {
     return {
-      name: i18n.__(room.value),
+      name : i18n.__(room.value),
       value: room.value,
-      icon: room.icon
+      icon : room.icon
     };
   });
 
   devices = devices.map(device => {
     let pluralVal = device.noPlural ? device.value : device.value + 's';
     return {
-      name: i18n.__(device.value),
-      pluralName: i18n.__(pluralVal),
-      value: device.value,
+      name       : i18n.__(device.value),
+      pluralName : i18n.__(pluralVal),
+      value      : device.value,
       pluralValue: pluralVal,
-      icon: device.icon,
-      type: device.type
+      icon       : device.icon,
+      type       : device.type
     };
   });
 }
@@ -220,9 +231,9 @@ module.exports = class extends Generator { // eslint-disable-line id-match
     super(args, opts);
 
     i18n.configure({
-      locales: languages.map(lang => lang.value),
+      locales  : languages.map(lang => lang.value),
       directory: this.sourceRoot() + '/i18n',
-      register: global
+      register : global
     });
   }
 
@@ -251,7 +262,7 @@ module.exports = class extends Generator { // eslint-disable-line id-match
         floors[i].rooms = [];
         structure.push(floors[i]);
         let tpl = Object.assign({
-          name: floors[i].name + '_rooms',
+          name   : floors[i].name + '_rooms',
           message: 'Please select the rooms on ' + floors[i].value
         }, roomsTemplate);
         floorsPrompts.push(tpl);
@@ -278,7 +289,7 @@ module.exports = class extends Generator { // eslint-disable-line id-match
         roomList.forEach(function(room, i) {
           structure[index].rooms[i].devices = [];
           let tpl = Object.assign({
-            name: floor.name + '_' + room.name + '_devices',
+            name   : floor.name + '_' + room.name + '_devices',
             message: 'Select smart devices in: ' + room.name + ' on ' + floor.value
           }, devicesTemplate);
           roomsPrompts.push(tpl);
@@ -337,10 +348,10 @@ module.exports = class extends Generator { // eslint-disable-line id-match
     if (this.props.filesGenerated.includes('habpanel')) {
       let habpanel = devices.map(function(device) {
         return {
-          id: device.pluralValue,
+          id  : device.pluralValue,
           name: device.pluralName || device.pluralValue,
-          row: 0,
-          col: 0,
+          row : 0,
+          col : 0,
           tile: {
             backdrop_iconset: 'eclipse-smarthome-classic',
             backdrop_icon: device.icon,

@@ -1,4 +1,4 @@
-# Yeoman openHAB Generator [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][daviddm-image]][daviddm-url] [![Donate][paypal-image]][paypal-url]
+# Yeoman openHAB Generator [![NPM version][npm-image]][npm-url]
 > This is a command-line tool that generates openHAB items, sitemap and a [HABPanel](https://github.com/openhab/org.openhab.ui.habpanel) dashboard for your home.
 [openHAB](http://openhab.org/) is a vendor and techology agnostic open source automation software for your home.
 
@@ -18,6 +18,7 @@ along with `your-home-name.sitemap` and a HABPanel json file that you can later 
 ## Installation
 
 First, install [Yeoman](http://yeoman.io) and generator-openhab using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)).
+If you're using [openHABian](https://github.com/openhab/openhabian), Node.js should be already installed.
 
 ```bash
 npm i -g yo generator-openhab
@@ -34,12 +35,5 @@ yo openhab
 
 MIT © [kubawolanin](http://www.kubawolanin.com)
 
-
 [npm-image]: https://badge.fury.io/js/generator-openhab.svg
 [npm-url]: https://npmjs.org/package/generator-openhab
-[travis-image]: https://travis-ci.org/kubawolanin/generator-openhab.svg?branch=master
-[travis-url]: https://travis-ci.org/kubawolanin/generator-openhab
-[daviddm-image]: https://david-dm.org/kubawolanin/generator-openhab.svg?theme=shields.io
-[daviddm-url]: https://david-dm.org/kubawolanin/generator-openhab
-[paypal-image]: https://img.shields.io/badge/Donate-PayPal-green.svg
-[paypal-url]: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=3U4AR5PXBTWH4&lc=US&currency_code=PLN&bn=PP%2dDonationsBF%3abtn_donate_LG%2egif%3aNonHosted
