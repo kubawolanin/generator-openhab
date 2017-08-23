@@ -11,7 +11,8 @@ const yosay = require('yosay');
  */
 let languages = [
   { name: 'English', value: 'en' },
-  { name: 'Polish', value: 'pl' }
+  { name: 'Polish', value: 'pl' },
+  { name: 'French', value: 'fr' }
 ];
 
 /**
